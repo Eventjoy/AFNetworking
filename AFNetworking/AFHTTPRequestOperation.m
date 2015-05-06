@@ -229,17 +229,19 @@ NSString * AFCreateIncompleteDownloadDirectoryPath(void) {
     self.completionBlock = ^ {
         if ([self isCancelled]) {
             return;
-        }
-        
+		}
+		//dispatch_queue_t default_queue = dispatch_get_main_queue();
+		dispatch_queue_t default_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+		
         if (self.error) {
             if (failure) {
-                dispatch_async(self.failureCallbackQueue ? self.failureCallbackQueue : dispatch_get_main_queue(), ^{
+                dispatch_async(self.failureCallbackQueue ? self.failureCallbackQueue : default_queue, ^{
                     failure(self, self.error);
                 });
             }
         } else {
             if (success) {
-                dispatch_async(self.successCallbackQueue ? self.successCallbackQueue : dispatch_get_main_queue(), ^{
+                dispatch_async(self.successCallbackQueue ? self.successCallbackQueue : default_queue, ^{
                     success(self, self.responseData);
                 });
             }

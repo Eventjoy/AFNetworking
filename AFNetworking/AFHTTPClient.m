@@ -530,6 +530,7 @@ static void AFNetworkReachabilityReleaseCallback(const void *info) {
     
     if (!operation) {
         operation = [[[AFHTTPRequestOperation alloc] initWithRequest:urlRequest] autorelease];
+		[operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)];
     }
     
     [operation setCompletionBlockWithSuccess:success failure:failure];
